@@ -1,0 +1,163 @@
+AroundAnnMain.java
+package com.Aspect.Around;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class AoundAnnMain {
+	 public static void main(String[] args) {
+	 AnnotationConfigApplicationContext context = new
+	AnnotationConfigApplicationContext(AroundAnnConfig.class);
+	 // Get the PaymentService bean from the context
+	 PaymentService paymentService = context.getBean(PaymentService.class);
+	 // Create a sample payment
+	 Payment payment = new Payment();
+	 payment.setTransactionId("XXXX2325");
+	 payment.setAmount(5000.00);
+	 // Call the method to trigger AOP with around advice
+	 paymentService.processPayment(payment);
+	 // Close the context
+	 context.close();
+	 }
+}
+
+
+AroundAnnClass.java
+package com.Aspect.Around;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
+@Aspect
+@Component
+public class AroundAnnClass {
+ @Around("execution(* com.Aspect.Around.PaymentService.processPayment(..))")
+ public Object logPayment(ProceedingJoinPoint joinPoint) throws Throwable {
+ // Log before processing payment
+ System.out.println("Audit Log: Before processing payment.");
+ // Proceed with the payment processing
+ Object result = joinPoint.proceed();
+ // Log after processing payment
+ System.out.println("Audit Log: After processing payment.");
+ return result;
+ }
+}
+
+
+AroundAnnConfig.java
+package com.Aspect.Around;
+
+import org.springframework.context.annotation.Bean;
+//AppConfig.java
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+@Configuration
+@ComponentScan(basePackages = "com.Aspect.Around")
+@EnableAspectJAutoProxy
+public class AroundAnnConfig {
+@Bean
+public PaymentService paymentService()
+{
+return new PaymentService();
+}
+}
+
+
+AroundMain.java
+package com.Aspect.Around;
+// Main.java
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+public class AroundMain {
+ public static void main(String[] args) {
+ // Load the Spring XML configuration
+ ApplicationContext context = new
+ClassPathXmlApplicationContext("AroundXmlConf.xml");
+ // Get the PaymentService bean from the context
+ PaymentService paymentService = context.getBean(PaymentService.class);
+//Create a sample payment
+Payment payment = new Payment();
+payment.setTransactionId("TX123");
+payment.setAmount(500.00);
+// Call the method to trigger AOP with around advice
+paymentService.processPayment(payment);
+// Close the context
+((ClassPathXmlApplicationContext) context).close();
+}
+}
+
+AroundXml.java
+package com.Aspect.Around;
+import org.aspectj.lang.ProceedingJoinPoint;
+public class AroundXml
+{
+ public Object logPayment(ProceedingJoinPoint joinPoint) throws Throwable {
+ // Log before processing payment
+ System.out.println("Audit Log: Before processing payment.");
+ // Proceed with the payment processing
+ Object result = joinPoint.proceed();
+ // Log after processing payment
+ System.out.println("Audit Log: After processing payment.");
+ return result;
+ }
+}
+
+
+Payment.java
+package com.Aspect.Around;
+public class Payment {
+ private String transactionId;
+ private double amount;
+public String getTransactionId() {
+return transactionId;
+}
+public void setTransactionId(String transactionId) {
+this.transactionId = transactionId;
+}
+public double getAmount() {
+return amount;
+}
+public void setAmount(double amount) {
+this.amount = amount;
+}
+ // Getters and setters
+}
+
+
+PaymentService.java
+package com.Aspect.Around;
+public class PaymentService {
+ public void processPayment(Payment payment)
+ {
+ // Simulate processing payment
+ System.out.println("Processing payment. Transaction ID: " +
+payment.getTransactionId() + ", Amount: $" + payment.getAmount());
+ }
+}
+
+
+AroundXmlConf.java
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:aop="http://www.springframework.org/schema/aop"
+ xsi:schemaLocation="
+ http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/aop
+ http://www.springframework.org/schema/aop/spring-aop.xsd">
+ <!-- Define the PaymentService bean -->
+ <bean id="paymentService" class="com.Aspect.Around.PaymentService"/>
+ <!-- Define the AuditLogAspect bean -->
+ <bean id="auditLogAspect" class="com.Aspect.Around.AroundXml"/>
+ <!-- Configure AOP with Around advice -->
+ <aop:config>
+ <!-- Define the pointcut for the methods in PaymentService -->
+ <aop:pointcut id="paymentServiceMethods" expression="execution(*
+com.Aspect.Around.PaymentService.*(..))"/>
+ <!-- Define the around advice using the pointcut -->
+ <aop:aspect ref="auditLogAspect">
+ <aop:around method="logPayment" pointcut-ref="paymentServiceMethods"/>
+ </aop:aspect>
+ </aop:config>
+</beans>

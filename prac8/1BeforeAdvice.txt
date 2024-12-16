@@ -1,0 +1,102 @@
+BeforeDemo.java
+package com.Aspect.Before;
+public class BeforeDemo
+{
+ public void logBefore()
+ {
+ System.out.println("Welcome to before world...");
+ System.out.println("Executing before the method...");
+ }
+}
+
+BeforeConf.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:aop="http://www.springframework.org/schema/aop"
+ xsi:schemaLocation="
+ http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/aop
+ http://www.springframework.org/schema/aop/spring-aop.xsd">
+ <bean id="calculator" class="com.Aspect.Before.Calculator"/>
+ <bean id="BeforeEx" class="com.Aspect.Before.BeforeDemo"/>
+ <aop:config>
+ <aop:pointcut id="calculatorMethods" expression="execution(*
+com.Aspect.Before.Calculator.add(..))"/>
+ <aop:aspect ref="BeforeEx">
+ <aop:before method="logBefore" pointcut-ref="calculatorMethods"/>
+ </aop:aspect>
+ </aop:config>
+</beans>
+
+BeforeMain.java
+package com.Aspect.Before;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+public class BeforeMain {
+public static void main(String[] args)
+{
+ // Load the Spring XML configuration
+ ApplicationContext context = new
+ClassPathXmlApplicationContext("BeforeConf.xml");
+ // Get the Calculator bean from the context
+ Calculator calculator = (Calculator) context.getBean("calculator");
+ // Call the add method to trigger AOP with before advice
+ int result = calculator.add(5, 10);
+ // Print the result
+ System.out.println("Result: " + result);
+ }
+}
+
+
+BeforeAnnClass
+package com.Aspect.Before;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
+@Aspect
+@Component
+public class BeforeAnnClass
+{
+ // Before advice method
+ @Before("execution(* com.Aspect.Before.Calculator.add(..))")
+ public void logBefore() {
+ System.out.println("Executing before the method...");
+ }
+}
+
+BeforeAnnConf.java
+package com.Aspect.Before;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+@Configuration
+@ComponentScan(basePackages = "com.Aspect.Before")
+@EnableAspectJAutoProxy
+public class BeforeAnnConf
+{
+@Bean
+ public Calculator calculator()
+{
+ return new Calculator();
+ }
+}
+
+BeforeAnnMain
+package com.Aspect.Before;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+public class BeforeAnnMain
+ {
+ public static void main(String[] args)
+ {
+	 System.out.println("C24111_AdityaShirsat");
+ AnnotationConfigApplicationContext context = new
+AnnotationConfigApplicationContext(BeforeAnnConf.class);
+Calculator calculator = context.getBean(Calculator.class);
+int result = calculator.add(5, 10);
+System.out.println("Result: " + result);
+context.close();
+}
+}

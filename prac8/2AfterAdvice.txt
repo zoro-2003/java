@@ -1,0 +1,167 @@
+Student.java
+
+package com.Aspect.After;
+
+public class Student {
+	 private String studentId;
+	 private String name;
+	public String getStudentId() {
+	return studentId;
+	}
+	public void setStudentId(String studentId) {
+	this.studentId = studentId;
+	}
+	public String getName() {
+	return name;
+	}
+	public void setName(String name) {
+	this.name = name;
+	}
+	 void setStudentId1(String studentId2) {
+		// TODO Auto-generated method stub
+		
+	}
+}
+
+
+
+
+StudentService.java
+package com.Aspect.After;
+
+public class StudentService {
+	public void enrollStudent(Student student) {
+		// Logic for enrolling a student
+		 System.out.println("Enrolling student: " + student.getName());
+		 }
+		 public void processPayment(Student student, double amount) {
+		 // Logic for processing payment
+		 System.out.println("Processing payment for student: " + student.getName() + ",Amount: $" + amount);
+		 }
+		 public void generateTranscript(Student student) {
+		 // Logic for generating a transcript
+		 System.out.println("Generating transcript for student: " + student.getName());
+	}
+		public void enrollStudent1(Student student) {
+			// TODO Auto-generated method stub
+			
+		}
+}
+
+
+
+
+AfterAspect.java
+package com.Aspect.After;
+
+public class AfterAspect {
+	// After advice method
+	 public void logAfter() {
+	 System.out.println("Executing after advice. Operation completed.");
+	 }
+	 // After-returning advice method
+	 public void logAfterReturning(Object result) {
+	 System.out.println("Executing after-returning advice. Result: " + result);
+	 }
+	 // After-throwing advice method
+	 public void logAfterThrowing(Exception ex) {
+	 System.out.println("Executing after-throwing advice. Exception: " + 
+	ex.getMessage());
+	 }
+}
+
+
+
+
+AfterAppConfig.java
+package com.Aspect.After;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import com.Aspect.After.StudentService;
+@Configuration
+@ComponentScan(basePackages = "com.Aspect.After")
+@EnableAspectJAutoProxy
+
+
+public class AfterAppConfig {
+
+	@Bean
+	 public StudentService studentServices() 
+	{
+	 return new StudentService();
+	 }
+}
+
+AfterXmlMain.java
+package com.Aspect.After;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.Aspect.After.Student;
+import com.Aspect.After.StudentService;
+
+public class AfterXmlMain {
+
+	public static void main(String[] args) 
+	 {
+	 // Load the Spring XML configuration
+	 ApplicationContext context = new
+	ClassPathXmlApplicationContext("AfterConf.xml");
+	 // Get the StudentService bean from the context
+	 StudentService studentService = (StudentService) 
+	context.getBean("studentService");
+	 // Create a sample student
+	 Student student = new Student();
+	 student.setStudentId("123");
+	 student.setName("NMITD");
+	 // Call methods to trigger AOP with after, after-returning, and after-throwing advice
+	 studentService.enrollStudent(student);
+	 studentService.processPayment(student, 1000);
+	 studentService.generateTranscript(student);
+	 // Close the context
+	 ((ClassPathXmlApplicationContext) context).close();
+	 }
+
+}
+
+
+
+
+AfterConf.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop
+           https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="studentService" class="com.Aspect.After.StudentService"/>
+    <!-- Define the LoggingAspect bean -->
+    <bean id="loggingAspect" class="com.Aspect.After.AfterAspect"/>
+
+    <!-- Configure AOP with After, After-Returning, and After-Throwing advice -->
+    <aop:config>
+        <!-- Define the pointcut for the methods in StudentService -->
+        <aop:pointcut id="studentServiceMethods" expression="execution(* com.Aspect.After.StudentService.*(..))"/>
+
+        <!-- Define the after advice using the pointcut -->
+        <aop:aspect ref="loggingAspect">
+            <aop:after method="logAfter" pointcut-ref="studentServiceMethods"/>
+        </aop:aspect>
+
+        <!-- Define the after-returning advice using the pointcut -->
+        <aop:aspect ref="loggingAspect">
+            <aop:after-returning method="logAfterReturning" pointcut-ref="studentServiceMethods"
+                                 returning="result"/>
+        </aop:aspect>
+
+        <!-- Define the after-throwing advice using the pointcut -->
+        <aop:aspect ref="loggingAspect">
+            <aop:after-throwing method="logAfterThrowing" pointcut-ref="studentServiceMethods"
+                                throwing="ex"/>
+        </aop:aspect>
+    </aop:config>
+</beans>

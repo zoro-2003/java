@@ -1,0 +1,100 @@
+PointcutAnn.java
+package com.Aspect.pointcutAspect;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
+@Component
+@Aspect
+public class PointcutAnn
+{
+ @Before("execution(* com.Aspect.pointcutAspect..*(..))")
+ public void logAllServiceMethods(JoinPoint joinPoint)
+ {
+ System.out.println("Logging all service methods: " +
+joinPoint.getSignature().toShortString());
+ }
+ @Before("execution(* com.Aspect.pointcutAspect..create*(..))")
+ public void logCreateMethods(JoinPoint joinPoint)
+ {
+	 System.out.println("Logging create methods: " +
+	joinPoint.getSignature().toShortString());
+	 }
+	 @Before("execution(* com.Aspect.pointcutAspect..update*(..))")
+	 public void logUpdateMethods(JoinPoint joinPoint)
+	 {
+	 System.out.println("Logging update methods: " +
+	joinPoint.getSignature().toShortString());
+	 }
+	}
+
+Pointcutmain.java
+package com.Aspect.pointcutAspect;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+public class Pointcutmain {
+ public static void main(String[] args)
+ {
+ try (ClassPathXmlApplicationContext context =
+ new ClassPathXmlApplicationContext("Conf.xml"))
+ {
+ // Get the UserService bean from the context
+ UserService userService = context.getBean(UserService.class);
+ // Use the UserService methods
+ userService.createUser("aadi", "aadi123");
+ userService.updateUser("aaadi");
+ userService.deleteUser("aaaadi");
+ userService.nonOperation(); // This method will not be logged
+ }
+ }
+}
+
+
+UserService.java
+package com.Aspect.pointcutAspect;
+public class UserService {
+ public void createUser(String username, String password)
+ {
+ System.out.println("Creating user: " + username);
+ }
+ public void updateUser(String username) {
+ System.out.println("Updating user: " + username);
+ }
+ public void deleteUser(String username) {
+ System.out.println("Deleting user: " + username);
+ }
+ public void nonOperation() {
+ // This method will not be logged
+ }
+}
+
+Conf.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:aop="http://www.springframework.org/schema/aop"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/aop
+ http://www.springframework.org/schema/aop/spring-aop.xsd">
+ <!-- Define the UserService bean -->
+ <bean id="userService" class="com.Aspect.pointcutAspect.UserService"/>
+ <!-- Define the LoggingAspect bean -->
+ <bean id="loggingAspect" class="com.Aspect.pointcutAspect.PointcutAnn"/>
+ <!-- Configure AOP -->
+ <aop:config>
+ <aop:aspect ref="loggingAspect">
+ <!-- Pointcut for all methods in the service package -->
+ <aop:pointcut id="allServiceMethods" expression="execution(*
+com.Aspect.pointcutAspect.UserService.*(..))"/>
+ <aop:before method="logAllServiceMethods" pointcut-ref="allServiceMethods"/>
+ <!-- Pointcut for methods starting with 'create' in the service package -->
+ <aop:pointcut id="createMethods" expression="execution(*
+com.Aspect.pointcutAspect.UserService.create*(..))"/>
+ <aop:before method="logCreateMethods" pointcut-ref="createMethods"/>
+ <!-- Pointcut for methods starting with 'update' in the service package -->
+ <aop:pointcut id="updateMethods" expression="execution(*
+com.Aspect.pointcutAspect.UserService.update*(..))"/>
+ <aop:before method="logUpdateMethods" pointcut-ref="updateMethods"/>
+ </aop:aspect>
+ </aop:config>
+</beans>

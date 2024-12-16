@@ -1,0 +1,42 @@
+
+Controller.java:
+package com.example.demo;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+public class controller {
+ @GetMapping("/hello-world")
+ public String helloWorld() {
+ return "Hey Mr";
+ }
+ @GetMapping("/hello-world-bean")
+ public HelloWorldBean helloWorldBean() {
+ return new HelloWorldBean("Hey");
+ }
+}
+
+HelloWorldBean.java:
+package com.example.demo;
+public class HelloWorldBean {
+ private String message;
+ public HelloWorldBean(String message) {
+ this.message = message;
+ }
+ public String getMessage()xxxxx {
+ return message;
+ }
+public void setMessage(String message) {
+ this.message = message;
+ }
+}
+
+Application.java:
+package com.example.demo;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+@SpringBootApplication
+public class Prac10newApplication {
+public static void main(String[] args) {
+SpringApplication.run(Prac10newApplication.class, args);
+}
+}

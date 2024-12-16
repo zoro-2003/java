@@ -1,0 +1,18 @@
+import java.util.*;
+public class Hashset {
+    public static void main(String args[]) {
+        Set<Integer> numSet1 = new HashSet<Integer>();
+        numSet1.addAll(Arrays.asList(1, 2, 3, 4, 5, 6));
+        Set<Integer> numSet2 = new HashSet<Integer>();
+        numSet2.addAll(Arrays.asList(4, 5, 6, 7, 8));
+        System.out.println("Original numSet1: " + numSet1);
+        System.out.println("Original numSet2: " + numSet2);
+        List<Integer> numList = new ArrayList<>(numSet1);
+        System.out.println("\nConverted HashSet to ArrayList: " + numList);
+        Set<Integer> numSet3 = (Set<Integer>) ((HashSet<Integer>) numSet1).clone();
+        System.out.println("\nCloned HashSet numSet1 to numSet3: " + numSet3);
+        Set<Integer> intersectionSet = new HashSet<>(numSet1); 
+        intersectionSet.retainAll(numSet2); 
+        System.out.println("\nIntersection of numSet1 and numSet2: " + intersectionSet);
+    }
+}

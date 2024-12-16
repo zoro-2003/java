@@ -1,0 +1,27 @@
+import java.util.*;
+
+public class SetSortingExample {
+    public static void main(String[] args) {
+        // Create a HashSet
+        Set<String> fruits = new HashSet<>();
+        fruits.add("Apple");
+        fruits.add("Orange");
+        fruits.add("Banana");
+        fruits.add("Mango");
+        fruits.add("Grapes");
+
+        System.out.println("Original Set (unordered): " + fruits);
+
+        // Convert the Set to a List
+        List<String> fruitList = new ArrayList<>(fruits);
+
+        // Sort the List
+        Collections.sort(fruitList);
+
+        System.out.println("Sorted List: " + fruitList);
+
+        // Convert the sorted list back to a Set if needed
+        Set<String> sortedSet = new LinkedHashSet<>(fruitList);
+        System.out.println("Sorted Set (maintains order): " + sortedSet);
+    }
+}

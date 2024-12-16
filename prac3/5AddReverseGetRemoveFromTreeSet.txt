@@ -1,0 +1,25 @@
+import java.util.*;
+ 
+public class TreeMap {
+    public static void main(String args[]) {
+        TreeSet<Integer> set1 = new TreeSet<Integer>();
+        set1.addAll(Arrays.asList(1, 3, 5, 7, 9, 11));
+        TreeSet<Integer> set2 = new TreeSet<Integer>();
+        set2.addAll(Arrays.asList(2, 4, 6, 8, 10, 12));
+        System.out.println("Original TreeSet set1: " + set1);
+        System.out.println("Original TreeSet set2: " + set2);
+        set1.addAll(set2);
+        System.out.println("\nAfter adding all elements of set2 to set1: " + set1);
+        NavigableSet<Integer> reverseSet = set1.descendingSet();
+        System.out.println("\nReverse order view of set1: " + reverseSet);
+        Integer firstElement = set1.first();
+        Integer lastElement = set1.last();
+        System.out.println("\nFirst element in set1: " + firstElement);
+        System.out.println("Last element in set1: " + lastElement);
+        Integer greaterOrEqual = set1.ceiling(6);  
+        System.out.println("\nElement in set1 greater than or equal to 6: " + greaterOrEqual);
+        Integer removedLast = set1.pollLast(); 
+        System.out.println("\nRemoved last element from set1: " + removedLast);
+        System.out.println("set1 after removing last element: " + set1);
+    }
+}

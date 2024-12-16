@@ -1,0 +1,40 @@
+import java.util.*;
+class Employee implements Comparable<Employee> {
+    private int id;
+    private String name;
+    private String position;
+    public Employee(int id, String name, String position) {
+        this.id = id;
+        this.name = name;
+        this.position = position;
+    }
+    public int getId() {
+        return id;
+    }
+    public String getName() {
+        return name;
+    }
+    public String getPosition() {
+        return position;
+    }
+    public int compareTo(Employee other) {
+        return this.name.compareTo(other.name); // Compare by name
+    }
+    public String toString() {
+        return "Employee{id=" + id + ", name='" + name + "', position='" + position + "'}";
+    }
+}
+public class CompanuOrgsChart {
+    public static void main(String[] args) {
+        Set<Employee> employees = new TreeSet<>();
+        employees.add(new Employee(1, "Alice", "CEO"));
+        employees.add(new Employee(2, "Bob", "Manager"));
+        employees.add(new Employee(3, "Charlie", "Developer"));
+        employees.add(new Employee(4, "David", "HR"));
+        employees.add(new Employee(5, "Eve", "Manager"));
+        System.out.println("Company Organizational Chart (Alphabetical Order by Name):");
+        for (Employee employee : employees) {
+            System.out.println(employee);
+        }
+    }
+}

@@ -1,0 +1,28 @@
+import java.util.LinkedHashSet;
+import java.util.Iterator;
+ 
+public class ShoppingWishList {
+    
+    public static void main(String[] args) {
+        LinkedHashSet<String> wishlist = new LinkedHashSet<>();
+ 
+        wishlist.add("Laptop");
+        wishlist.add("Smartphone");
+        wishlist.add("Headphones");
+        wishlist.add("Smartwatch");
+        System.out.println("Shopping Wishlist:");
+        displayWishlist(wishlist);
+        wishlist.remove("Smartwatch");
+        System.out.println("\nWishlist after removing Smartwatch:");
+        displayWishlist(wishlist);
+        wishlist.add("Bluetooth Speaker");
+        System.out.println("\nWishlist after adding Bluetooth Speaker:");
+        displayWishlist(wishlist);
+    }
+    public static void displayWishlist(LinkedHashSet<String> wishlist) {
+        Iterator<String> iterator = wishlist.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+    }
+}

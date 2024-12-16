@@ -1,0 +1,41 @@
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+public class SetString
+{
+public static void main(String[] args)
+{
+Set<List<String>> setOfLists = new HashSet<>();
+System.out.println("ADITYA SHIRSAT " + "C24111");
+setOfLists.add(new ArrayList<>()); 
+setOfLists.add(new ArrayList<>()); 
+setOfLists.forEach(innerList ->
+{
+innerList.add("aditya");
+innerList.add("tanmay");
+innerList.add("vivek");
+innerList.add("devendra");
+});
+System.out.println("Forward Direction:");
+for (List<String> innerList : setOfLists)
+{
+Iterator<String> iterator = innerList.iterator();
+while (iterator.hasNext())
+{
+System.out.println("- " + iterator.next());
+}
+}
+System.out.println("\nReverse Direction:");
+for (List<String> innerList : setOfLists)
+{
+ListIterator<String>listIterator=innerList.listIterator(innerList.size());
+while (listIterator.hasPrevious())
+{
+System.out.println("- " + listIterator.previous());
+}
+}
+}
+}

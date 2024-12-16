@@ -1,0 +1,51 @@
+import java.util.*;
+class Voter {
+    private int voterId;
+    private String name;
+ 
+    public Voter(int voterId, String name) {
+        this.voterId = voterId;
+        this.name = name;
+    }
+    public int getVoterId() {
+        return voterId;
+    }
+    public String getName() {
+        return name;
+    }
+    @Override
+    public String toString() {
+        return "Voter{" +
+                "voterId=" + voterId +
+                ", name='" + name + '\'' +
+                '}';
+    }
+}
+public class VotingSystem {
+    public static void main(String[] args) {
+        // Set to store voter IDs who have already voted
+        Set<Integer> votedVoterIds = new HashSet<>();
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("Enter Voter ID (or -1 to exit): ");
+            int voterId = scanner.nextInt();
+            if (voterId == -1) {
+                break; 
+            }
+            if (votedVoterIds.contains(voterId)) {
+                System.out.println("Voter ID " + voterId + " has already voted. Voting is not allowed again.");
+            } else {
+                System.out.println("Enter Voter's Name: ");
+                scanner.nextLine();  
+                String name = scanner.nextLine();
+                Voter voter = new Voter(voterId, name);
+                votedVoterIds.add(voterId);
+                System.out.println("Vote accepted for " + voter);
+            }
+        }
+        System.out.println("\nVoters who have voted:");
+        for (Integer id : votedVoterIds) {
+            System.out.println("Voter ID: " + id);
+        }
+    }
+}

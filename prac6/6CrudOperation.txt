@@ -1,0 +1,326 @@
+UserBean.java
+package com;
+
+public class UserBean {
+    private int id;
+    private String username;
+    private String email;
+    private String password;
+
+    public UserBean() {
+        super();
+    }
+
+    public UserBean(int id, String username, String email, String password) {
+        super();
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
+
+
+UserDao.java
+package com;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserDao {
+    public static Connection getConnection() {
+        return ConnectionProvider.getCon();
+    }
+
+    public static List<UserBean> getAllUsers() {
+        List<UserBean> users = new ArrayList<>();
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM users");
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                UserBean user = new UserBean();
+                user.setId(rs.getInt("id"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public static int saveUser(UserBean user) {
+        int status = 0;
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement("INSERT INTO users (username, email, password) VALUES (?, ?, ?)")) {
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            status = ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return status;
+    }
+
+    public static int updateUser(UserBean user) {
+        int status = 0;
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement("UPDATE users SET username=?, email=?, password=? WHERE id=?")) {
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setInt(4, user.getId());
+            status = ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return status;
+    }
+
+    public static int deleteUser(int id) {
+        int status = 0;
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement("DELETE FROM users WHERE id=?")) {
+            ps.setInt(1, id);
+            status = ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return status;
+    }
+
+    public static UserBean getUserById(int id) {
+        UserBean user = new UserBean();
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE id=?")) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    user.setId(rs.getInt("id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setEmail(rs.getString("email"));
+                    user.setPassword(rs.getString("password"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+}
+
+
+CRUDServlet.java
+package com;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
+@WebServlet("/CRUDServlet")
+public class CRUDServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        switch (action) {
+            case "add":
+                addUser(request, response);
+                break;
+            case "update":
+                updateUser(request, response);
+                break;
+            case "delete":
+                deleteUser(request, response);
+                break;
+            default:
+                response.sendRedirect("listUsers.jsp");
+        }
+    }
+
+    private void addUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        UserBean user = new UserBean();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(password);
+
+        UserDao.saveUser(user);
+        response.sendRedirect("listUsers.jsp");
+    }
+
+    private void updateUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        UserBean user = new UserBean();
+        user.setId(id);
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(password);
+
+        UserDao.updateUser(user);
+        response.sendRedirect("listUsers.jsp");
+    }
+
+    private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        UserDao.deleteUser(id);
+        response.sendRedirect("listUsers.jsp");
+    }
+}
+
+
+listUsers.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page import="java.util.*, com.UserBean, com.UserDao" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User List</title>
+</head>
+<body>
+    <h2>User List</h2>
+    <a href="addUser.jsp">Add New User</a>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Actions</th>
+        </tr>
+        <%
+            List<UserBean> users = UserDao.getAllUsers();
+            for (UserBean user : users) {
+        %>
+        <tr>
+            <td><%= user.getId() %></td>
+            <td><%= user.getUsername() %></td>
+            <td><%= user.getEmail() %></td>
+            <td><%= user.getPassword() %></td>
+            <td>
+                <a href="editUser.jsp?id=<%= user.getId() %>">Edit</a>
+                <a href="CRUDServlet?action=delete&id=<%= user.getId() %>">Delete</a>
+            </td>
+        </tr>
+        <% } %>
+    </table>
+</body>
+</html>
+
+
+addUser.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add User</title>
+</head>
+<body>
+    <h2>Add User</h2>
+    <form action="CRUDServlet" method="post">
+        <input type="hidden" name="action" value="add" />
+        Username: <input type="text" name="username" required /><br/>
+        Email: <input type="email" name="email" required /><br/>
+        Password: <input type="password" name="password" required /><br/>
+        <button type="submit">Add User</button>
+    </form>
+</body>
+</html>
+
+editUser.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page import="com.UserDao, com.UserBean" %>
+<%
+    int id = Integer.parseInt(request.getParameter("id"));
+    UserBean user = UserDao.getUserById(id);
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit User</title>
+</head>
+<body>
+    <h2>Edit User</h2>
+    <form action="CRUDServlet" method="post">
+        <input type="hidden" name="action" value="update" />
+        <input type="hidden" name="id" value="<%= user.getId() %>" />
+        Username: <input type="text" name="username" value="<%= user.getUsername() %>" required /><br/>
+        Email: <input type="email" name="email" value="<%= user.getEmail() %>" required /><br/>
+        Password: <input type="password" name="password" value="<%= user.getPassword() %>" required /><br/>
+        <button type="submit">Update User</button>
+    </form>
+</body>
+</html>
+
+ConnectionProvider.java
+package com;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class ConnectionProvider {
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/userdb";
+    private static final String DB_USER = "root"; // Update if needed
+    private static final String DB_PASSWORD = "system"; // Update if needed
+
+    public static Connection getCon() {
+        Connection con = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return con;
+    }
+}

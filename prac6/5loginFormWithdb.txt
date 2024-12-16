@@ -1,0 +1,258 @@
+loginpage.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>>login page</title>
+</head>
+<body>
+<h1>C24111 AdityaShirsat</h1>
+<h1>Login Here Plz:-------------</h1>
+<form action="loginservlet" method="post" >
+<label for = Username>Username:- </label>
+<input type= "text" id="text" name="Username" required>
+<label for = Password>Password:- </label>
+<input type= "password" id="text" name="Password" required>
+<button type="submit">Login</button>
+<button type="reset">Cancel </button>
+</form>
+
+</body>
+</html>
+
+
+Errorpage.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Error Page</title>
+</head>
+<body>
+<h2 style="color: red;">Invalid username or password!</h2>
+<a href="loginpage.jsp">Try Again</a>
+</body>
+</html>
+
+Loginservlet.jsp
+package com;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+import java.io.IOException;
+
+/**
+ * Servlet implementation class Loginservlet
+ */
+@WebServlet("/Loginservlet")
+public class Loginservlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public Loginservlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+		
+		String Username =request.getParameter("Username");
+		String Password =request.getParameter("Password");
+		System.out.println("username" + Username);
+		System.out.println("Password"+ Password);
+		// Create a User bean and set its properties
+		User obj= new User();
+		obj.setUsername(Username);
+		obj.setPassword(Password);
+		// Validate user
+		 if (obj.validate())
+		 {
+		 // Successful login
+		 HttpSession session = request.getSession();
+		 session.setAttribute("user", obj);
+		 response.sendRedirect("success.jsp");
+		 } else
+		 {
+		 // Failed login
+		 response.sendRedirect("Errorpage.jsp");
+		 }
+	}
+
+}
+
+
+logoutpage.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Logout Page</title>
+</head>
+<body>
+<%
+ session.invalidate();
+ response.sendRedirect("loginpage.jsp");
+%>
+</body>
+</html>
+
+
+User.java
+package com;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import com.ConnectionProvider;
+
+public class User {
+    private String Username;
+    private String Password;
+
+    // Constructor
+    public User() {
+        super();
+    }
+
+    public User(String username, String password) {
+        super();
+        Username = username;
+        Password = password;
+    }
+
+    // Getter and Setter methods
+    public String getUsername() {
+        return Username;
+    }
+
+    public void setUsername(String username) {
+        Username = username;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String password) {
+        Password = password;
+    }
+
+    // Validate user credentials
+    public boolean validate() {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            // Use ConnectionProvider to get a connection
+            connection = ConnectionProvider.getCon();
+
+            // SQL query to check user credentials
+            String sql = "SELECT * FROM login WHERE username = ? AND password = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, this.Username);
+            preparedStatement.setString(2, this.Password);
+
+            // Execute the query
+            resultSet = preparedStatement.executeQuery();
+
+            // If a record is found, user credentials are valid
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Close resources
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+
+ConnectionProvider.java
+package com;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class ConnectionProvider {
+    
+    // Database URL, username, and password
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/logindb";
+    private static final String DB_USER = "root"; // change this if your MySQL username is different
+    private static final String DB_PASSWORD = "system"; // change this to your MySQL password
+
+    // Method to get the database connection
+    public static Connection getCon() {
+        Connection con = null;
+        try {
+            // Load the MySQL JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            // Establish a connection to the database
+            con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return con;
+    }
+}
+
+
+Success.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="com.User" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Confirm Data</title>
+</head>
+<body>
+<%
+ HttpSession session1= request.getSession(false);
+ if (session == null || session.getAttribute("user") == null) {
+     response.sendRedirect("loginpage.jsp");
+     return;
+ }
+ User user = (User) session1.getAttribute("user");
+%>
+<h2>Welcome, <%= user.getUsername() %>!</h2>
+<a href="loginpage.jsp">Logout</a>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!--indexfile.js-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>>Telephone Directory</title>
+</head>
+<body>
+<h1>Telephone Directory</h1>
+<a href="add_contact.jsp">Add Contact</a>
+<a href="view_contact.jsp">View Contacts</a>
+</body>
+</html>
+
+
+<!--add_contact.js-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Add Contact</title>
+</head>
+<body>
+<h1>Add Contact</h1>
+<form action="add_contact_process.jsp" method="post">
+Name: <input type="text" name="name"><br><br>
+Mobile-no: <input type="number" name="mobileno"><br><br>
+Email: <input type="email" name="email"><br><br>
+<input type="submit" value="Add Contact">
+</form>
+</body>
+</html>
+
+
+<!--add_contact_process.js-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%@ page import="java.sql.*" %>
+<%
+String name = request.getParameter("name");
+String Mobileno = request.getParameter("mobileno");
+String email = request.getParameter("email");
+Connection conn = null;
+PreparedStatement ps = null;
+String dbURL = "jdbc:mysql://localhost:3306/telephonedb";
+String dbUser = "root";
+String dbPass = "system";
+try {
+Class.forName("com.mysql.cj.jdbc.Driver");
+conn = DriverManager.getConnection(dbURL, dbUser, dbPass);
+ps = conn.prepareStatement("INSERT INTO contactdetails (name, mobileno, email) VALUES (?, ?, ?)");
+ps.setString(1, name);
+ps.setString(2, Mobileno);
+ps.setString(3, email);
+ps.executeUpdate();
+response.sendRedirect("Indexfile.jsp");
+} catch (Exception e) 
+{
+e.printStackTrace();
+} finally
+{
+if (ps != null) ps.close();
+if (conn != null) conn.close();
+}
+%>
+</body>
+</html>
+
+<!--view_contact.js-->
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>View Contacts</title>
+</head>
+<body>
+<h1>View Contacts</h1>
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+    </tr>
+    <%
+    Connection conn = null;
+    Statement stmt = null;
+    String dbURL = "jdbc:mysql://localhost:3306/telephonedb";
+    String dbUser = "root";
+    String dbPass = "system";
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        conn = DriverManager.getConnection(dbURL, dbUser, dbPass);
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM contactdetails");
+        while (rs.next()) {
+    %>
+    <tr>
+        <td><%= rs.getString("name") %></td>
+        <td><%= rs.getString("Mobileno") %></td>
+        <td><%= rs.getString("email") %></td>
+    </tr>
+    <%
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+    }
+    %>
+</table>
+</body>
+</html>

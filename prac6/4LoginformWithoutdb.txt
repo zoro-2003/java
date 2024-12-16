@@ -1,0 +1,42 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>>Login Page</title>
+</head>
+<body>
+<h1>C24111 AdityaShirsat</h1>
+<h1>Login Page</h1>
+ <form method="post">
+ <label for="username">Username:</label>
+ <input type="text" id="username" name="username" required>
+ <br><br>
+ <label for="password">Password:</label>
+ <input type="password" id="password" name="password" required>
+ <br><br>
+ <input type="submit" value="Login">
+ </form>
+ <%
+ if (request.getMethod().equalsIgnoreCase("POST"))
+ {
+ String username = request.getParameter("username");
+ String password = request.getParameter("password");
+ if ("admin".equals(username) && "1234".equals(password))
+ {
+ %>
+ <p>Welcome, <%= username %>! You have successfully logged in.</p>
+ <%
+ }
+else
+ {
+ %>
+ <p style="color: red;">Invalid username or password. Please try again.</p>
+ <%
+ }
+ }
+ %>
+
+</body>
+</html>

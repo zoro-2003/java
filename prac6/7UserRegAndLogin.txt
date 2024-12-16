@@ -1,0 +1,162 @@
+UserServlet1.java
+package com;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+
+@WebServlet("/UserServlet")
+public class UserServlet1 extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        HttpSession session = request.getSession();
+
+        if ("register".equals(action)) {
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+
+            User user = new User(name, email, password);
+
+            if (UserDao.registerUser(user)) {
+                session.setAttribute("message", "Registration successful! Please login.");
+                response.sendRedirect("login.jsp");
+            } else {
+                session.setAttribute("message", "Registration failed. Try again.");
+                response.sendRedirect("register.jsp");
+            }
+        } else if ("login".equals(action)) {
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+
+            if (UserDao.validateUser(email, password)) {
+                session.setAttribute("userEmail", email);
+                response.sendRedirect("success.jsp");
+            } else {
+                session.setAttribute("message", "Invalid credentials. Try again.");
+                response.sendRedirect("login.jsp");
+            }
+        }
+    }
+}
+
+register.jsp
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+    <h2>User Registration</h2>
+    <form action="UserServlet" method="post">
+        <input type="hidden" name="action" value="register">
+        Name: <input type="text" name="name" required><br>
+        Email: <input type="email" name="email" required><br>
+        Password: <input type="password" name="password" required><br>
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>
+
+
+login.jsp
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+<h2>C24111_AdityaShirsat</h2>
+    <h2>Login</h2>
+    <form action="UserServlet" method="post">
+        <input type="hidden" name="action" value="login">
+        Email: <input type="email" name="email" required><br>
+        Password: <input type="password" name="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
+
+success.jsp
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Success</title>
+</head>
+<body>
+    <h2>Welcome, you are logged in!</h2>
+    <a href="login.jsp">Logout</a>
+</body>
+</html>
+
+
+error.jsp
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error</title>
+</head>
+<body>
+    <h2 style="color: red;">An error occurred. Please try again.</h2>
+</body>
+</html>
+
+
+web.xml
+<web-app>
+    <servlet>
+        <servlet-name>UserServlet1</servlet-name>
+        <servlet-class>com.UserServlet1</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserServlet1</servlet-name>
+        <url-pattern>/UserServlet1</url-pattern>
+    </servlet-mapping>
+</web-app>
+
+
+User.java
+package com;
+public class User {
+    private String name;
+    private String email;
+    private String password;
+
+    public User() {}
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}

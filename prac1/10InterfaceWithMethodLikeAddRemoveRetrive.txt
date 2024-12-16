@@ -1,0 +1,58 @@
+public class ContainerGeneric<T> implements Contain<T> {
+    private Object[] items;
+    private int size;
+    private static final int DEFAULT_CAPACITY = 10;
+    public ContainerGeneric() {
+        items = new Object[DEFAULT_CAPACITY];
+        size = 0;
+    }
+    public void add(T item) {
+        if (size == items.length) {
+            resize();
+        }
+        items[size++] = item;
+    }
+    public void remove(T item) {
+        for (int i = 0; i < size; i++) {
+            if (items[i].equals(item)) {
+                // Shift items to the left after removal
+                for (int j = i; j < size - 1; j++) {
+                    items[j] = items[j + 1];
+                }
+                items[--size] = null; // Nullify the last item
+                break;
+            }
+        }
+    }
+    public T get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        return (T) items[index];
+    }
+    public int size() {
+        return size;
+    }
+    private void resize() {
+        int newCapacity = items.length * 2;
+        Object[] newItems = new Object[newCapacity];
+        System.arraycopy(items, 0, newItems, 0, items.length);
+        items = newItems;
+    }
+    public static void main(String[] args) {
+        System.out.println("Testing ContainerGeneric");
+        ContainerGeneric<Integer> intContainer = new ContainerGeneric<>();
+        intContainer.add(10);
+        intContainer.add(20);
+        intContainer.add(30);
+        System.out.println("Item at index 1: " + intContainer.get(1)); 
+        intContainer.remove(20);
+        System.out.println("After removal, size: " + intContainer.size()); 
+        ContainerGeneric<String> stringContainer = new ContainerGeneric<>();
+        stringContainer.add("Hello");
+        stringContainer.add("World");
+        System.out.println("Item at index 0: " + stringContainer.get(0)); 
+        stringContainer.remove("Hello");
+        System.out.println("After removal, size: " + stringContainer.size()); 
+    }
+}

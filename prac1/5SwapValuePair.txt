@@ -1,0 +1,42 @@
+package Generics;
+
+public class Swap<K, V> {
+    private K key;
+    private V value;
+    public Swap(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+    public K getKey() {
+        return key;
+    }
+    public V getValue() {
+        return value;
+    }
+    public void setKey(K key) {
+        this.key = key;
+    }
+    public void setValue(V value) {
+        this.value = value;
+    }
+    public void swap() {
+        // Swap logic using a wrapper object
+        Object temp = key;
+        key = (K) value; 
+        value = (V) temp; 
+    }
+    public String display() {
+        return "Key: " + key + ", Value: " + value;
+    }
+    public static void main(String[] args) {
+ 
+        Swap<Integer, String> pair = new Swap<>(1, "One");
+        System.out.println("Before Swap: " + pair.display());
+        pair.swap();
+        System.out.println("After Swap: " + pair.display());
+ 
+        Swap<String, Double> pair2 = new Swap<>("PI", 3.14);
+        System.out.println("\nBefore Swap: " + pair2.display());
+        pair2.swap();
+        System.out.println("After Swap: " + pair2.display());
+    }}

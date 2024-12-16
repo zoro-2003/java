@@ -1,0 +1,17 @@
+import java.util.Arrays;
+import java.util.List;
+public class GenericSumCalculator {
+    public static double calculateSum(List<? extends Number> numbers) {
+        double sum = 0;
+        for (Number number : numbers) {
+            sum += number.doubleValue();      }
+        return sum;  }
+    public static void main(String[] args) {
+        List<Integer> intList = Arrays.asList(10, 20, 30, 40);
+        System.out.println("ADITYA SHIRSAT " + "C24111");
+        System.out.println("Sum of integers: " + calculateSum(intList)); 
+        List<Double> doubleList = Arrays.asList(10.5, 20.5, 30.5);
+        System.out.println("Sum of doubles: " + calculateSum(doubleList)); 
+        List<Number> mixedList = Arrays.asList(1, 2.5, 3.75, 4);
+        System.out.println("Sum of mixed numbers: " + calculateSum(mixedList)); 
+    }}

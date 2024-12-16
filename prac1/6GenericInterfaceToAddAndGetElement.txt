@@ -1,0 +1,58 @@
+package Generics;
+
+import java.util.ArrayList;
+import java.util.List;
+public interface Storage<T>
+{
+void store(T item);
+T retrieve(int index);
+void delete(int index);
+int size();
+}
+public class InterfaceContainer<T> implements Storage<T> {
+ private List<T> items;
+ public InterfaceContainer() {
+ items = new ArrayList<>();
+ }
+ @Override
+ public void store(T item) {
+ items.add(item);
+ }
+ @Override
+ public T retrieve(int index) {
+ if (index >= 0 && index < items.size()) {
+ return items.get(index);
+ } else {
+ throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + items.size());
+ } }
+ @Override
+ public void delete(int index) {
+ if (index >= 0 && index < items.size())
+ {
+ items.remove(index);
+ } else {
+ throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + items.size());
+ }
+ }
+ @Override
+ public int size() {
+ return items.size();
+ }
+ public static void main(String[] args) {
+ Storage<Integer> intStorage = new InterfaceContainer<>();
+ intStorage.store(11);
+ intStorage.store(22);
+ intStorage.store(33);
+ System.out.println("Stored Integers: " + intStorage.retrieve(0) + ", " + intStorage.retrieve(1));
+ // Create a SimpleStorage for String
+ Storage<String> stringStorage = new InterfaceContainer<>();
+ stringStorage.store("Hello");
+ stringStorage.store("ADITYA");
+ System.out.println("Stored Strings: " + stringStorage.retrieve(0) + ", " + stringStorage.retrieve(1));
+ // Display size
+ System.out.println("Integer Storage Size: " + intStorage.size());
+ System.out.println("String Storage Size: " + stringStorage.size());
+ // Deleting an item
+ stringStorage.delete(0);
+ System.out.println("After deletion, String Storage Size: " + stringStorage.size());
+ }}

@@ -1,0 +1,26 @@
+package Generics;
+
+import java.util.List;
+public class SumEvenOdd {
+    public static <T extends Number> void calculateEvenOddSums(List<T> numbers) {
+        double sumEven = 0;
+        double sumOdd = 0;
+        for (T number : numbers) {
+            if (number.intValue() % 2 == 0) {
+                sumEven += number.doubleValue();
+            } else {
+                sumOdd += number.doubleValue();
+            }
+        }
+        System.out.println("Sum of even numbers: " + sumEven);
+        System.out.println("Sum of odd numbers: " + sumOdd);
+    }
+    public static void main(String[] args) {
+        List<Integer> intList = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        List<Double> doubleList = List.of(1.5, 2.5, 3.0, 4.0, 5.0, 6.5);
+        System.out.println("Integer list results:");
+        calculateEvenOddSums(intList);
+        System.out.println("\nDouble list results:");
+        calculateEvenOddSums(doubleList);
+    }
+}

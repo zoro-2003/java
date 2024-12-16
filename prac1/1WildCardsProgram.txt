@@ -1,0 +1,57 @@
+package Generics;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class WildCard {
+    // Unbounded wildcard method
+    public static void printList(List<?> list) {
+        for (Object obj : list) {
+            System.out.println(obj);
+        }
+    }
+
+    // Upper-bounded wildcard method: Accepts Number or its subclasses
+    public static double sumOfList(List<? extends Number> list) {
+        double sum = 0.0;
+        for (Number num : list) {
+            sum += num.doubleValue();
+        }
+        return sum;
+    }
+
+    // Lower-bounded wildcard method: Accepts Integer or its superclasses
+    public static void addNumbers(List<? super Integer> list) {
+        for (int i = 1; i <= 5; i++) {
+            list.add(i); // Adding integers to the list
+        }
+    }
+
+    public static void main(String[] args) {
+        // Using unbounded wildcard
+        List<String> stringList = new ArrayList<>();
+        stringList.add("Apple");
+        stringList.add("Banana");
+        stringList.add("Cherry");
+        System.out.println("Printing String List:");
+        printList(stringList);
+
+        // Using upper-bounded wildcard
+        List<Integer> intList = new ArrayList<>();
+        intList.add(10);
+        intList.add(20);
+        intList.add(30);
+        System.out.println("\nSum of Integer List: " + sumOfList(intList));
+
+        List<Double> doubleList = new ArrayList<>();
+        doubleList.add(10.5);
+        doubleList.add(20.5);
+        System.out.println("Sum of Double List: " + sumOfList(doubleList));
+
+        // Using lower-bounded wildcard
+        List<Number> numberList = new ArrayList<>();
+        addNumbers(numberList); // Adding integers to numberList
+        System.out.println("\nAfter adding numbers to Number List:");
+        printList(numberList);
+    }
+}

@@ -1,0 +1,32 @@
+package List;
+
+import java.util.ArrayList;
+import java.util.List;
+public class ForEachLoop
+{
+public static void main(String[] args) {
+List<String> studentList = new ArrayList<>();
+studentList.add("Aditya");
+studentList.add("Babita");
+studentList.add("Aniket");
+studentList.add("Shashikant");
+System.out.println("List of students: " + studentList);
+String secondStudent = studentList.get (1);
+System.out.println("Second student: " + secondStudent);
+String searchStudent = "Eve";
+boolean containsEve = studentList.contains(searchStudent);
+System.out.println("Is Eve in the list? " + containsEve);
+String removedStudent = "Charu";
+boolean removed = studentList.remove(removedStudent);
+System.out.println("Removed " + removedStudent + ": " + removed);
+int size = studentList.size();
+System.out.println("Number of students after removal: " + size);
+System.out.println("Students in the list:");
+for (String student : studentList)
+{
+System.out.println(student);
+}
+studentList.clear();
+System.out.println("List cleared. Is it empty now? " + studentList.isEmpty());
+}
+}

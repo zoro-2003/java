@@ -1,0 +1,24 @@
+import java.util.ArrayList;
+import java.util.List;
+public class ArrayListOperations {
+    public static void main(String[] args) {
+    	System.out.println("ADITYA SHIRSAT " + "C24111");
+        List<String> list = new ArrayList<>();
+        list.add("Apple");
+        list.add("Banana");
+        list.add("Orange");
+        list.add("Mango");
+        System.out.println(" Iterate through all elements in the ArrayList:");
+        for (String fruit : list) {
+            System.out.println(fruit);
+        }
+        System.out.println("\n Insert an element at the first position:");
+        list.add(0, "Pineapple"); 
+        System.out.println("Updated List: " + list);
+        System.out.println("\n Retrieve an element at a specified index (index 2):");
+        String elementAtIndex2 = list.get(2); 
+        System.out.println("Element at index 2: " + elementAtIndex2);
+        System.out.println("\n Update an element at index 3:");
+        System.out.println("Updated List: " + list);
+    }
+}

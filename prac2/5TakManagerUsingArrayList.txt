@@ -1,0 +1,83 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+class Task {
+    private String title;
+    private String description;
+    private int priority; 
+    public Task(String title, String description, int priority) {
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public int getPriority() {
+        return priority;
+    }
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+    public String toString() {
+        return "Task{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", priority=" + priority +
+                '}';
+    }
+}
+public class TaskManager {
+    private ArrayList<Task> taskList;
+    public TaskManager() {
+        taskList = new ArrayList<>();
+    }
+    public void addTask(Task task) {
+        taskList.add(task);
+        System.out.println("Task added: " + task);
+    }
+    public void removeTask(String title) {
+        taskList.removeIf(task -> task.getTitle().equalsIgnoreCase(title));
+        System.out.println("Task removed with title: " + title);
+    }
+    public void displayTasks() {
+        if (taskList.isEmpty()) {
+            System.out.println("No tasks to display.");
+        } else {
+            System.out.println("Tasks in the Task Manager:");
+            for (Task task : taskList) {
+                System.out.println(task);
+            }
+        }
+    }
+    public void sortTasksByPriority() {
+        Collections.sort(taskList, new Comparator<Task>() {
+            @Override
+            public int compare(Task t1, Task t2) {
+                return Integer.compare(t2.getPriority(), t1.getPriority()); 
+            }
+        });
+        System.out.println("Tasks sorted by priority.");
+    }
+    public static void main(String[] args) {
+        TaskManager manager = new TaskManager();
+        manager.addTask(new Task("Task 1", "Complete homework", 2));
+        manager.addTask(new Task("Task 2", "Clean the house", 1));
+        manager.addTask(new Task("Task 3", "Buy groceries", 3));
+        manager.addTask(new Task("Task 4", "Prepare presentation", 5));
+        manager.displayTasks();
+        manager.sortTasksByPriority();
+        manager.displayTasks();
+        manager.removeTask("Task 2");
+        manager.displayTasks();
+    }
+}

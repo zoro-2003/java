@@ -1,0 +1,104 @@
+import java.util.LinkedList;
+import java.util.ListIterator;
+class Student {
+    private String name;
+    private String studentId;
+    private double grade;
+    public Student(String name, String studentId, double grade) {
+        this.name = name;
+        this.studentId = studentId;
+        this.grade = grade;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getStudentId() {
+        return studentId;
+    }
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+    public double getGrade() {
+        return grade;
+    }
+    public void setGrade(double grade) {
+        this.grade = grade;
+    }
+    public String toString() {
+        return "Student{name='" + name + "', studentId='" + studentId + "', grade=" + grade + "}";
+    }
+}
+public class StudentGradesManagementSystem {
+    private LinkedList<Student> studentList;
+    public StudentGradesManagementSystem() {
+        studentList = new LinkedList<>();
+    }
+    public void addStudent(Student student) {
+        studentList.add(student);
+        System.out.println("Added student: " + student);
+    }
+    public void removeStudentById(String studentId) {
+        ListIterator<Student> iterator = studentList.listIterator();
+        while (iterator.hasNext()) {
+            Student student = iterator.next();
+            if (student.getStudentId().equals(studentId)) {
+                iterator.remove();
+                System.out.println("Removed student with studentId: " + studentId);
+                return;
+            }
+        }
+        System.out.println("Student with studentId: " + studentId + " not found.");
+    }
+    public Student searchStudentById(String studentId) {
+        for (Student student : studentList) {
+            if (student.getStudentId().equals(studentId)) {
+                return student;
+            }
+        }
+        return null;
+    }
+    public void calculateAverageGrade() {
+        if (studentList.isEmpty()) {
+            System.out.println("No students available to calculate average grade.");
+            return;
+        }
+        double totalGrade = 0;
+        for (Student student : studentList) {
+            totalGrade += student.getGrade();
+        }
+        double averageGrade = totalGrade / studentList.size();
+        System.out.println("Average grade of all students: " + averageGrade);
+    }
+    public void displayStudents() {
+        if (studentList.isEmpty()) {
+            System.out.println("No students available.");
+        } else {
+            System.out.println("Student records:");
+            for (Student student : studentList) {
+                System.out.println(student);
+            }
+        }
+    }
+    public static void main(String[] args) {
+        // Create the Student Grades Management System instance
+        StudentGradesManagementSystem system = new StudentGradesManagementSystem();
+     
+        system.addStudent(new Student("Alice", "S101", 85.5));
+        system.addStudent(new Student("Bob", "S102", 92.0));
+        system.addStudent(new Student("Charlie", "S103", 78.3));
+        system.displayStudents();
+        Student student = system.searchStudentById("S102");
+        if (student != null) {
+            System.out.println("Found student: " + student);
+        } else {
+            System.out.println("Student with studentId S102 not found.");
+        }
+        system.calculateAverageGrade();
+        system.removeStudentById("S103");
+        system.displayStudents();
+        system.calculateAverageGrade();
+    }
+}

@@ -1,0 +1,44 @@
+import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
+public class ListInterface2 {
+    public static void main(String[] args) {
+        System.out.println("Testing List Interface Operations");
+        LinkedList<String> linkedList = new LinkedList<>();
+        linkedList.add("Apple");
+        linkedList.add("Banana");
+        linkedList.add("Orange");
+        linkedList.add("Mango");
+        linkedList.add("Grapes");
+        int startPosition = 2; 
+        System.out.println(" Iterate through all elements starting at specified position:");
+        iterateFromPosition(linkedList, startPosition);
+        System.out.println("\n Convert LinkedList to ArrayList:");
+        ArrayList<String> arrayList = new ArrayList<>(linkedList);
+        System.out.println("ArrayList: " + arrayList);
+        LinkedList<String> linkedList2 = new LinkedList<>();
+        linkedList2.add("Apple");
+        linkedList2.add("Banana");
+        linkedList2.add("Orange");
+        linkedList2.add("Mango");
+        linkedList2.add("Grapes");
+        System.out.println("\n Compare two LinkedLists:");
+        boolean areEqual = linkedList.equals(linkedList2);
+        System.out.println("Are the two LinkedLists equal? " + areEqual);
+        System.out.println("\nShuffle elements in the LinkedList:");
+        shuffleLinkedList(linkedList);
+    }
+    public static void iterateFromPosition(LinkedList<String> linkedList, int startPosition) {
+        if (startPosition >= 0 && startPosition < linkedList.size()) {
+            for (int i = startPosition; i < linkedList.size(); i++) {
+                System.out.println(linkedList.get(i));
+            }
+        } else {
+            System.out.println("Invalid start position.");
+        }
+    }
+    public static void shuffleLinkedList(LinkedList<String> linkedList) {
+        Collections.shuffle(linkedList);
+        System.out.println("Shuffled LinkedList: " + linkedList);
+    }
+}

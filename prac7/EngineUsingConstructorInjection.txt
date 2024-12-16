@@ -1,0 +1,61 @@
+Engine.java
+package prac7_7;
+
+public class Engine {
+
+    public void start() {
+        System.out.println("Engine started");
+    }
+}
+
+
+Car.java
+package prac7_7;
+
+public class Car {
+
+    private Engine engine;
+
+    // Constructor injection of the Engine
+    public Car(Engine engine) {
+        this.engine = engine;
+    }
+
+    // Method to start the car
+    public void start() {
+        engine.start();  // Calling the start method of Engine
+        System.out.println("Car started");
+    }
+}
+
+
+car-config.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="engine" class="prac7_7.Engine"/>
+    <bean id="car" class="prac7_7.Car">
+        <constructor-arg ref="engine"/>
+    </bean>
+
+</beans>
+
+
+MAinApp.java
+package prac7_7;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class MainApp {
+
+    public static void main(String[] args) {
+    
+        ApplicationContext context = new ClassPathXmlApplicationContext("car-config.xml");
+        Car car = (Car) context.getBean("car");
+        car.start();
+    }
+}
+

@@ -1,0 +1,83 @@
+registerint.java
+package prac7_4;
+public interface registerint
+{
+public void registeruser(String name, String email, String userType);
+}
+
+Reguser.java
+package prac7_4;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+@Primary
+@Component
+public class Reguser implements registerint{
+	public void registeruser(String name, String email, String userType)
+	{
+	System.out.println("Registering regular user:");
+	 System.out.println("Name: " + name + ", Email: " + email + ", UserType: " +
+	userType);
+	}
+
+}
+
+
+infuser.java
+package prac7_4;
+
+public class Infuuser implements registerint  {
+	public void registeruser(String name, String email, String userType)
+	{
+	System.out.println("Registering influencer:");
+	 System.out.println("Name: " + name + ", Email: " + email + ", UserType: " + userType);
+	 System.out.println("Additional influencer privileges granted.");
+	}
+}
+
+
+registerclass.java
+package prac7_4;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+@Component
+public class registerclass {
+		private registerint rein;
+		@Autowired
+		public registerclass(registerint rein)
+		{
+		super();
+		this.rein = rein;
+		}
+		public void handleRegistration(String name, String email, String userType)
+		{
+		 rein.registeruser(name, email, userType);
+		}
+		}
+
+annconf.java
+package prac7_4;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+@Configuration
+@ComponentScan(basePackages="prac7_4")
+public class annconf {
+
+}
+
+AnnCon.java
+package prac7_4;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+public class AnnCon {
+	public static void main(String[] args)
+	{
+		System.out.println("C24111_AdityaShirsat");
+	ApplicationContext context = new
+	AnnotationConfigApplicationContext(prac7_4.annconf.class);
+	 // Get the RegistrationController Bean
+	 registerclass cont = context.getBean(prac7_4.registerclass.class);
+	 // Simulate User Registrations
+	 cont.handleRegistration("Aditya", "adityashirsat1170@gmail.com", "Regular");
+	 cont.handleRegistration("adesh", "adesh@gmail.com", "Influencer");
+	}
+	}

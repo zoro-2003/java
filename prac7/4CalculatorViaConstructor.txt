@@ -1,0 +1,93 @@
+AnnCon.java
+package prac7_4;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+public class AnnCon {
+	public static void main(String[] args)
+	{
+		System.out.println("C24111_AdityaShirsat");
+	ApplicationContext context = new
+	AnnotationConfigApplicationContext(prac7_4.annconf.class);
+	 // Get the RegistrationController Bean
+	 registerclass cont = context.getBean(prac7_4.registerclass.class);
+	 // Simulate User Registrations
+	 cont.handleRegistration("Aditya", "adityashirsat1170@gmail.com", "Regular");
+	 cont.handleRegistration("adesh", "adesh@gmail.com", "Influencer");
+	}
+	}
+
+
+Operation.java
+package prac7_5;
+
+public interface Operation {
+    double execute(double num1, double num2);
+}
+AddOperation.java
+package prac7_5;
+public class AddOperation implements Operation {
+    @Override
+    public double execute(double num1, double num2) {
+        return num1 + num2;
+    }
+}
+
+
+SubtractOperation.java
+package prac7_5;
+public class SubtractOperation implements Operation {
+    @Override
+    public double execute(double num1, double num2) {
+        return num1 - num2;
+    }
+}
+
+
+Calculator.java
+package prac7_5;
+public class Calculator {
+    private Operation operation;
+    public Calculator(Operation operation) {
+        this.operation = operation;
+    }
+    public double calculate(double num1, double num2) {
+        return operation.execute(num1, num2);
+    }
+    public void setOperation(Operation operation) {
+        this.operation = operation;
+    }
+}
+
+
+calculator-config.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="addOperation" class="prac7_5.AddOperation"/>
+    <bean id="subtractOperation" class="prac7_5.SubtractOperation"/>
+    <bean id="calculator" class="prac7_5.Calculator">
+        <constructor-arg ref="addOperation"/>
+    </bean>
+</beans>
+
+
+MainApp.java
+package prac7_5;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+public class MainApp {
+    public static void main(String[] args) {
+   
+        ApplicationContext context = new ClassPathXmlApplicationContext("calculator-config.xml");
+        Calculator calculator = (Calculator) context.getBean("calculator");
+        double additionResult = calculator.calculate(15.0, 5.0); 
+        System.out.println("Result of addition: " + additionResult);
+        calculator.setOperation((Operation) context.getBean("subtractOperation"));
+        double subtractionResult = calculator.calculate(15.0, 5.0); 
+        System.out.println("Result of subtraction: " + subtractionResult);
+    }
+}
+
+

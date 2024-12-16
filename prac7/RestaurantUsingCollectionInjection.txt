@@ -1,0 +1,75 @@
+MainApp.java
+package prac7_6;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class MainApp {
+
+    public static void main(String[] args) {
+        ApplicationContext context = new ClassPathXmlApplicationContext("restaurant-config.xml");
+
+        // Get the Restaurant bean
+        Restaurant restaurant = (Restaurant) context.getBean("restaurant");
+
+        // Print the menu
+        restaurant.printMenu();
+    }
+}
+
+
+Restaurant.java
+package prac7_6;
+
+
+import java.util.List;
+
+public class Restaurant {
+
+    private List<String> menu;
+
+    // Getter and Setter
+    public List<String> getMenu() {
+        return menu;
+    }
+
+    public void setMenu(List<String> menu) {
+        this.menu = menu;
+    }
+
+    // Method to print the menu
+    public void printMenu() {
+        System.out.println("Menu:");
+        for (String item : menu) {
+            System.out.println("- " + item);
+        }
+    }
+}
+
+
+restaurant-config.java
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Defining a bean for Restaurant -->
+    <bean id="restaurant" class="prac7_6.Restaurant">
+        <property name="menu">
+            <list>
+                <value>Pizza</value>
+                <value>Burger</value>
+                <value>Pasta</value>
+                <value>Salad</value>
+                <value>Soup</value>
+                <value>Biryani</value>
+                <value>Rice</value>
+                <value>rolls</value>
+                
+            </list>
+        </property>
+    </bean>
+
+</beans>
+

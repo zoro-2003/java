@@ -1,0 +1,59 @@
+Engine1.java
+package prac7_8;
+public class Engine1{
+    public void start() {
+        System.out.println("Engine started");
+    }
+}
+
+
+Car1.java
+package prac7_8;
+public class Car1 {
+    private Engine1 engine;
+    public void setEngine(Engine1 engine) {
+        this.engine = engine;
+    }
+    public void start() {
+        engine.start(); 
+        System.out.println("Car started");
+    }
+}
+
+
+car-config.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Define the Engine bean -->
+    <bean id="engine" class="prac7_8.Engine1"/>
+
+    <!-- Define the Car bean and inject the Engine bean using setter injection -->
+    <bean id="car" class="prac7_8.Car1">
+        <property name="engine" ref="engine"/>
+    </bean>
+
+</beans>
+
+
+MAinApp1.java
+package prac7_8;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class MainApp {
+    public static void main(String[] args) {
+        System.out.println("C24111_AdityaShirsat");
+        ApplicationContext context = new ClassPathXmlApplicationContext("car-config1.xml");
+
+        // Retrieve the Car bean from the Spring container
+        Car1 car = (Car1) context.getBean("car");
+
+        // Call the start method of Car, which will invoke the start method of Engine
+        car.start();
+    }
+}

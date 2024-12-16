@@ -1,0 +1,110 @@
+Mainapp.java
+package prac7;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+public class Mainapp {
+	public static void main(String[] args)
+	{
+	ApplicationContext con = new ClassPathXmlApplicationContext("Setxml.xml");
+	Setclass obj = (Setclass) con.getBean("xmlset");
+
+	System.out.println(obj);
+	}
+}
+
+
+Setclass.java
+package prac7;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class Setclass {
+    
+    private String name; // Property for name
+    private int id; // Property for id
+
+    // Database URL, username, and password
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/logindb?useSSL=false&serverTimezone=UTC";
+    private static final String DB_USER = "root"; // change this if your MySQL username is different
+    private static final String DB_PASSWORD = "system"; // change this to your MySQL password
+
+    // Method to get the database connection
+    public static Connection getCon() {
+        Connection con = null;
+        try {
+            // Load the MySQL JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            // Establish a connection to the database
+            con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return con;
+    }
+
+    // Getter and setter for the 'name' property
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // Getter and setter for the 'id' property
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "C24111_AdityaShirsat \nSetclass [name=" + name + ", id=" + id + "]";
+    }
+}
+
+Setxml.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- Define the bean with the correct fully qualified class name -->
+    <bean id="xmlset" class="prac7.Setclass">
+        <property name="name" value="nmitd" />
+        <property name="id" value="122" />
+    </bean>
+
+</beans>
+
+pom.xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>101</groupId>
+  <artifactId>101</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>module_7</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>122</groupId>
+  		<artifactId>registration</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.32</version> <!-- Use the appropriate version -->
+</dependency>
+
+  </dependencies>
+</project>

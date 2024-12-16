@@ -1,0 +1,64 @@
+pom.xml
+<dependencies>
+    <!-- Spring Context for annotations and dependency injection -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>5.3.30</version> <!-- Make sure to use the appropriate version -->
+    </dependency>
+
+    <!-- SLF4J (Simple Logging Facade for Java) for logging purposes -->
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.32</version>
+    </dependency>
+    <!-- Logback (for actual logging) -->
+    <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.2.6</version>
+    </dependency>
+</dependencies>
+
+
+HelloWorldConfig.java
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan(basePackages = "your.package")  // Replace with your package name
+public class HelloWorldConfig {
+}
+
+
+HelloWorldService.java
+import org.springframework.stereotype.Component;
+
+@Component
+public class HelloWorldService {
+
+    public void printMessage() {
+        System.out.println("Hello World");
+    }
+}
+
+
+
+HelloWorldApp.java
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class HelloWorldApp {
+
+    public static void main(String[] args) {
+        // Initialize the Spring context
+        ApplicationContext context = new AnnotationConfigApplicationContext(HelloWorldConfig.class);
+
+        // Get the HelloWorldService bean from the context
+        HelloWorldService helloWorldService = context.getBean(HelloWorldService.class);
+
+        // Call the method to print "Hello World"
+        helloWorldService.printMessage();
+    }
+}

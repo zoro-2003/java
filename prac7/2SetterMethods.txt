@@ -1,0 +1,113 @@
+Address.java
+package prac7_2;
+import org.springframework.stereotype.Component;
+@Component
+public class Address
+{
+private String city ="BOISAR";
+private String state ="MAHARASHTRA";
+public void setCity(String city)
+{
+this.city = city;
+}
+public void setState(String state)
+{
+this.state = state;
+}
+public String getCity()
+{
+return city;
+}
+public String getState()
+{
+return state;
+}
+@Override
+public String toString()
+{
+return "Address [city=" + city + ", state=" + state + "]";
+}
+}
+
+
+Person.java
+package prac7_2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+@Component
+public class Person
+{
+private String name;
+private Address address;
+public void setName(String name)
+{
+this.name = name;
+}
+@Autowired
+public void setAddress(Address address)
+{
+this.address = address;
+}
+public void displayInfo()
+{
+name="ADITYA SHIRSAT";
+System.out.println("Name: " + name);
+System.out.println("Address: " + address);
+}
+public void display()
+{
+ System.out.println("Name: " + name);
+ System.out.println("Address: " + address);
+}
+}
+
+
+annconfig.java
+package prac7_2;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+public class annconfig {
+	public static void main(String args[])
+	{
+	System.out.println("C24111_AdityaShirsat");
+	ApplicationContext co1= new ClassPathXmlApplicationContext("Meta.xml");
+	Person p1= (Person)co1.getBean("f2");
+	p1.display();
+	// Loading Bean using Annotation configuration
+	ApplicationContext ob1=new AnnotationConfigApplicationContext(appconfig.class);
+	Person p2 = (Person) ob1.getBean(Person.class);
+	p2.displayInfo();
+	}
+}
+
+
+appconfig.java
+package prac7_2;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+@ComponentScan(basePackages="prac7_2")
+@Configuration
+public class appconfig {
+}
+
+Meta.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:p="http://www.springframework.org/schema/p"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/context
+ http://www.springframework.org/schema/context/spring-context.xsd">
+<bean id="f1" class="prac7_2.Address">
+<property name= "city" value="DADAR"/>
+<property name="state"><value> Maharashtra </value> </property>
+</bean>
+<bean name="f2" class="prac7_2.Person">
+<property name="name" value="NMITD"/>
+<property name="address" ref="f1" />
+</bean>
+</beans>
+

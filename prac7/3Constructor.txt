@@ -1,0 +1,87 @@
+Engine.java
+package prac7_3;
+
+public class Engine {
+	private String type;
+	// Constructor
+	public Engine(String type)
+	{
+	this.type = type;
+	}
+	// Getter
+	public String getType()
+	{
+	return type;
+	}
+	@Override
+	public String toString()
+	{
+	return "Engine{" + "type='" + type + '\'' + '}';
+	}
+}
+
+
+Car.java
+package prac7_3;
+public class Car {
+	private String model;
+	private Engine engine;
+	// Constructor
+	public Car(String model, Engine engine)
+	{
+	this.model = model;
+	this.engine = engine;
+	}
+	// Getters
+	public String getModel()
+	{
+	return model;
+	}
+	public Engine getEngine()
+	{
+	return engine;
+	}
+	@Override
+	public String toString()
+	{
+	return "Car{" +"model='" + model + '\'' +", engine=" + engine +'}';
+	}
+}
+
+
+Testdata.java
+package prac7_3;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Testdata {
+	public static void main(String[] args)
+	{
+		System.out.println("C24111_AdityaShirsat");
+	@SuppressWarnings("resource")
+	ApplicationContext context = new
+	ClassPathXmlApplicationContext("Beans.xml");
+	// Retrieve the Car bean from the Spring container
+	Car car = (Car) context.getBean("carBean");
+	// Print the Car details
+	System.out.println(car);
+	}
+}
+
+
+Beans.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!-- Define beans for Engine and Car -->
+<bean id="engineBean" class="prac7_3.Engine">
+<constructor-arg value="V6"/>
+</bean>
+<bean id="carBean" class="prac7_3.Car">
+<constructor-arg value="Sedan"/>
+<constructor-arg ref="engineBean"/>
+</bean>
+</beans>
+

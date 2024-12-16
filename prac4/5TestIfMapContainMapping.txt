@@ -1,0 +1,21 @@
+import java.util.HashMap;
+import java.util.Map;
+public class ContainsValueTest {
+    public static void main(String[] args) {
+  
+        Map<Integer, String> map = new HashMap<>();
+        map.put(1, "Apple");
+        map.put(2, "Banana");
+        map.put(3, "Cherry");
+        System.out.println("Original Map: " + map);
+        String valueToCheck = "Banana";
+        if (map.containsValue(valueToCheck)) {
+            System.out.println("The map contains the value: " + valueToCheck);
+        } else {
+            System.out.println("The map does not contain the value: " + valueToCheck);
+        }
+        valueToCheck = "Mango";
+        if (map.containsValue(valueToCheck)) {
+            System.out.println("The map contains the value: " + valueToCheck);
+        } else {
+            System.out.println("The map does not contain the value: " + valueToCheck);   }}}

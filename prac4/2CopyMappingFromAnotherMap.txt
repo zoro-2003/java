@@ -1,0 +1,15 @@
+import java.util.HashMap;
+import java.util.Map;
+ 
+public class CopyMapping {
+    public static void main(String[] args) {
+        Map<Integer, String> originalMap = new HashMap<>();
+        originalMap.put(1, "Apple");
+        originalMap.put(2, "Banana");
+        originalMap.put(3, "Cherry");
+        System.out.println("Original Map: " + originalMap);
+        Map<Integer, String> copiedMap = new HashMap<>();
+        copiedMap.putAll(originalMap);
+        System.out.println("Copied Map: " + copiedMap);
+    }
+}

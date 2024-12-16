@@ -1,0 +1,70 @@
+EMPOYEE.Java
+public class Employee {
+    private int id;
+    private String name;
+    private String department;
+ 
+    // Constructor
+    public Employee(int id, String name, String department) {
+        this.id = id;
+        this.name = name;
+        this.department = department;
+    } 
+    // Getters and Setters
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getDepartment() {
+        return department;
+    }
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+    public String toString() {
+        return "ID: " + id + ", Name: " + name + ", Department: " + department;
+    }
+} 
+
+
+
+EMPlOYEEDIRECTORY.java
+import java.util.LinkedHashMap;
+import java.util.Map;
+public class EmployeeDirectory {    
+    public static void main(String[] args) {
+    
+        Map<Integer, Employee> employeeMap = new LinkedHashMap<>();
+        employeeMap.put(101, new Employee(101, "John Doe", "IT"));
+        employeeMap.put(102, new Employee(102, "Jane Smith", "HR"));
+        employeeMap.put(103, new Employee(103, "Alice Brown", "Finance"));
+        employeeMap.put(104, new Employee(104, "Bob White", "Marketing"));
+        System.out.println("Employee Directory:");
+        for (Employee employee : employeeMap.values()) {
+            System.out.println(employee);
+        }
+        int searchId = 102;
+        if (employeeMap.containsKey(searchId)) {
+            System.out.println("\nEmployee found: " + employeeMap.get(searchId));
+        } else {
+            System.out.println("\nEmployee with ID " + searchId + " not found.");
+        }
+        int removeId = 103;
+        if (employeeMap.containsKey(removeId)) {
+            employeeMap.remove(removeId);
+            System.out.println("\nEmployee with ID " + removeId + " has been removed.");
+        }
+        System.out.println("\nEmployee Directory after removal:");
+        for (Employee employee : employeeMap.values()) {
+            System.out.println(employee);
+        }
+    }
+}

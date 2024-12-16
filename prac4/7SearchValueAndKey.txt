@@ -1,0 +1,25 @@
+import java.util.Map;
+import java.util.TreeMap;
+ 
+public class SerachInTreeMap {
+    public static void main(String[] args) {
+        System.out.println("ADITYA SHIRSAT " + "C24111");
+        Map<Integer, String> treeMap = new TreeMap<>();
+        treeMap.put(1, "Apple");
+        treeMap.put(2, "Banana");
+        treeMap.put(3, "Cherry");
+        System.out.println("TreeMap: " + treeMap);
+        int keyToSearch = 2;
+        if (treeMap.containsKey(keyToSearch)) {
+            System.out.println("Key " + keyToSearch + " found with value: " + treeMap.get(keyToSearch));
+        } else {
+            System.out.println("Key " + keyToSearch + " not found in the TreeMap.");
+        }
+        String valueToSearch = "Cherry";
+        if (treeMap.containsValue(valueToSearch)) {
+            System.out.println("Value '" + valueToSearch + "' found in the TreeMap.");
+        } else {
+            System.out.println("Value '" + valueToSearch + "' not found in the TreeMap.");
+        }
+    }
+}

@@ -1,0 +1,36 @@
+import java.util.HashMap;
+import java.util.Map;
+public class MapOperations {
+public static void main(String[] args) {
+   System.out.println("ADITYA SHIRSAT " + "C24111");
+Map<String, Integer> mapA = new HashMap<>();
+Map<String, Integer> mapB = new HashMap<>();
+mapA.put("Apple", 10);
+mapA.put("Banana", 20);
+mapA.put("Cherry", 30);
+System.out.println("Map A: " + mapA);
+mapA.remove("Banana");
+System.out.println("Map A (after removing 'Banana'): " + mapA);
+String searchKey = "Cherry";
+if (mapA.containsKey(searchKey)) {
+System.out.println("'" + searchKey + "' found in mapA.");
+} else {
+System.out.println("'" + searchKey + "' not found in mapA.");
+}
+String getKey = "Apple";
+if (mapA.containsKey(getKey)) {
+int value = mapA.get(getKey);
+System.out.println("Value associated with '" + getKey + "': " + value);
+}
+mapB.putAll(mapA);
+// Print mapB
+System.out.println("Map B (after inserting mapA): " + mapB);
+// Print all keys and values of mapA
+System.out.println("\nAll keys and values of mapA:");
+for (Map.Entry<String, Integer> entry: mapA.entrySet())
+{
+System.out.println("Key: " + entry.getKey() + ", Value: " +
+entry.getValue());
+}
+}
+}

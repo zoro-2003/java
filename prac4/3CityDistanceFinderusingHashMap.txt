@@ -1,0 +1,33 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+ 
+public class CityDistanceFinder {
+ 
+    public static void main(String[] args) {
+        Map<String, Integer> cityDistanceMap = new HashMap<>();
+        cityDistanceMap.put("New York", 500);
+        cityDistanceMap.put("Los Angeles", 1500);
+        cityDistanceMap.put("Chicago", 800);
+        cityDistanceMap.put("Houston", 1200);
+        cityDistanceMap.put("Miami", 1000);
+        cityDistanceMap.put("San Francisco", 1700);
+        System.out.println("City Distance Map: " + cityDistanceMap);
+        String cityToSearch = "Chicago";
+        if (cityDistanceMap.containsKey(cityToSearch)) {
+            System.out.println("The distance to " + cityToSearch + " is: " + cityDistanceMap.get(cityToSearch) + " miles.");
+        } else {
+            System.out.println(cityToSearch + " is not in the list.");
+        }
+        int maxDistance = 1000;
+        System.out.println("\nCities within " + maxDistance + " miles:");
+ 
+        // Loop through the map to find cities within the specified distance
+        Set<Map.Entry<String, Integer>> entrySet = cityDistanceMap.entrySet();
+        for (Map.Entry<String, Integer> entry : entrySet) {
+            if (entry.getValue() <= maxDistance) {
+                System.out.println(entry.getKey() + ": " + entry.getValue() + " miles");
+            }
+        }
+    }
+}

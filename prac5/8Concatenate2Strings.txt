@@ -1,0 +1,13 @@
+interface StringConcatenator
+{
+String concatenate(String str1, String str2);
+}
+public class StringConcatenation6
+{
+public static void main(String[] args) {
+StringConcatenator concatenator = (str1, str2) -> str1 + str2;
+String firstString = "Hello, ";
+String secondString = "Lambda Expression!";
+String result = concatenator.concatenate(firstString, secondString);
+System.out.println("Concatenated String: " + result);
+} }

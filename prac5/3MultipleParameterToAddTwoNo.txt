@@ -1,0 +1,16 @@
+interface MathOperation
+{
+int perform(int a, int b);
+}
+public class LambdaAddition
+{
+public static void main(String[] args)
+{
+
+MathOperation addition = (a, b) -> a + b;
+int num1 = 5;
+int num2 = 10;
+int result = addition.perform(num1, num2);
+System.out.println("Result: " + result);
+}
+}

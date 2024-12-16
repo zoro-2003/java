@@ -1,0 +1,15 @@
+public class ReverseStringUsingLambda {
+    public static void main(String[] args) {
+        ReverseString reverse = (str) -> {
+            StringBuilder reversed = new StringBuilder(str);
+            return reversed.reverse().toString(); 
+        };
+        String originalString = "LambdaExpression";
+        String reversedString = reverse.reverse(originalString);
+        System.out.println("Original String: " + originalString);
+        System.out.println("Reversed String: " + reversedString);
+    }
+}
+interface ReverseString {
+    String reverse(String str); 
+}

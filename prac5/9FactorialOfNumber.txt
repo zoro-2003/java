@@ -1,0 +1,17 @@
+public class FactorialUsingLambda {
+    public static void main(String[] args) {
+        Factorial factorial = (n) -> {
+            int result = 1;
+            for (int i = 1; i <= n; i++) {
+                result *= i; 
+            }
+            return result; 
+        };
+        int number = 5;
+        int result = factorial.calculate(number);
+        System.out.println("Factorial of " + number + " is " + result);
+    }
+}
+interface Factorial {
+    int calculate(int n); 
+}

@@ -1,0 +1,18 @@
+public class KilometerToMileConverter {
+    public static void main(String[] args) {
+ 
+        // Lambda expression to convert kilometers to miles
+        // Conversion formula: 1 Kilometer = 0.621371 Miles
+        ConvertKilometersToMiles converter = (kilometers) -> kilometers * 0.621371;
+ 
+        // Test the conversion
+        double kilometers = 10.0;
+        double miles = converter.convert(kilometers);
+ 
+        // Display the result
+        System.out.println(kilometers + " kilometers is equal to " + miles + " miles.");
+    }
+}
+interface ConvertKilometersToMiles {
+    double convert(double kilometers); // Method to convert kilometers to miles
+}

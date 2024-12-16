@@ -1,0 +1,15 @@
+interface StringLength
+{
+int getLength(String s);
+}
+public class LambdaSingleParameter
+{
+public static void main(String[] args)
+{
+
+StringLength lengthFunc = s -> s.length();
+String input = "Lambda Expression";
+int length = lengthFunc.getLength(input);
+System.out.println("Length of '" + input + "': " + length); 
+} 
+}

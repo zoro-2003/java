@@ -1,0 +1,14 @@
+interface MathOp
+{
+int perform(int a, int b);
+}
+public class LambdaAdittionWithoutKeyword
+{
+public static void main(String[] args)
+{
+
+MathOp subtraction = (a, b) -> a - b;
+int result = subtraction.perform(15, 5);
+System.out.println("Result of subtraction: " + result);
+}
+}
